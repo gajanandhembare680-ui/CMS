@@ -52,7 +52,13 @@ const Login = ({ role = "student" }) => {
                 const userData = userDoc.data();
                 if (userData.role !== role) {
                     await signOut(auth); // Sign out the user
-                    setError(`Access denied. You are registered as a ${userData.role}, not an ${role}.`);
+                    if (role === 'admin' && userData.role === 'student') {
+                        setError("Access denied. You are registered as a Student, not an Admin.");
+                    } else if (role === 'student' && userData.role === 'admin') {
+                        setError("Access denied. You are registered as an Admin, not a Student.");
+                    } else {
+                        setError(`Access denied. You are registered as a ${userData.role}.`);
+                    }
                     setLoading(false);
                     return;
                 }
