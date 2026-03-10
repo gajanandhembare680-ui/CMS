@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Zap, BarChart3 } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Zap, BarChart3, Menu, X } from 'lucide-react';
 
 const Introduction = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
         <div style={{
             minHeight: '100vh',
@@ -12,12 +14,14 @@ const Introduction = () => {
             fontFamily: 'Inter, system-ui, sans-serif'
         }}>
             {/* Navbar */}
-            <nav style={{ padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <nav style={{ padding: '1.5rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#0f172a' }}>
                     <ShieldCheck size={32} style={{ color: '#3b82f6' }} />
                     <span style={{ fontSize: '1.5rem', fontWeight: '800', letterSpacing: '-0.025em' }}>ResolveIt</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+
+                {/* Desktop Menu */}
+                <div className="intro-desktop-menu" style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                     <Link to="/privacy-policy" style={{ color: '#475569', textDecoration: 'none', fontWeight: '500', fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0f172a'} onMouseOut={(e) => e.target.style.color = '#475569'}>Privacy Policy</Link>
                     <Link to="/terms-of-service" style={{ color: '#475569', textDecoration: 'none', fontWeight: '500', fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0f172a'} onMouseOut={(e) => e.target.style.color = '#475569'}>Terms of Service</Link>
                     <Link to="/cookie-policy" style={{ color: '#475569', textDecoration: 'none', fontWeight: '500', fontSize: '0.95rem', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0f172a'} onMouseOut={(e) => e.target.style.color = '#475569'}>Cookie Policy</Link>
@@ -38,6 +42,50 @@ const Introduction = () => {
                         Sign In
                     </Link>
                 </div>
+
+                {/* Mobile Menu Toggle */}
+                <button
+                    className="intro-mobile-toggle"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0f172a', display: 'none' }}
+                >
+                    {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                </button>
+
+                {/* Mobile Menu Dropdown */}
+                {isMenuOpen && (
+                    <div className="intro-mobile-menu" style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: 0,
+                        right: 0,
+                        background: '#ffffff',
+                        padding: '1.5rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1rem',
+                        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                        borderBottom: '1px solid #e2e8f0',
+                        zIndex: 50
+                    }}>
+                        <Link to="/privacy-policy" onClick={() => setIsMenuOpen(false)} style={{ color: '#475569', textDecoration: 'none', fontWeight: '500', fontSize: '1.05rem', padding: '0.5rem 0' }}>Privacy Policy</Link>
+                        <Link to="/terms-of-service" onClick={() => setIsMenuOpen(false)} style={{ color: '#475569', textDecoration: 'none', fontWeight: '500', fontSize: '1.05rem', padding: '0.5rem 0' }}>Terms of Service</Link>
+                        <Link to="/cookie-policy" onClick={() => setIsMenuOpen(false)} style={{ color: '#475569', textDecoration: 'none', fontWeight: '500', fontSize: '1.05rem', padding: '0.5rem 0' }}>Cookie Policy</Link>
+                        <Link to="/role-selection" onClick={() => setIsMenuOpen(false)} style={{
+                            padding: '0.75rem',
+                            background: '#2563eb',
+                            color: '#ffffff',
+                            borderRadius: '0.5rem',
+                            textDecoration: 'none',
+                            fontWeight: '600',
+                            fontSize: '1rem',
+                            textAlign: 'center',
+                            marginTop: '0.5rem'
+                        }}>
+                            Sign In
+                        </Link>
+                    </div>
+                )}
             </nav>
 
             {/* Hero Section */}

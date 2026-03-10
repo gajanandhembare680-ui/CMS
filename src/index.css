@@ -285,3 +285,14 @@ body {
     font-size: 1.75rem !important;
   }
 }
+
+/* --- Intro Page Responsive --- */
+@media (max-width: 768px) {
+  .intro-desktop-menu {
+    display: none !important;
+  }
+
+  .intro-mobile-toggle {
+    display: block !important;
+  }
+}
