@@ -253,3 +253,35 @@ body {
     padding-right: 1rem !important;
   }
 }
+
+/* --- Policy Pages Responsive --- */
+@media (max-width: 768px) {
+  .policy-header {
+    padding: 1rem 1.5rem !important;
+  }
+
+  .policy-main {
+    padding: 2rem 1.5rem !important;
+    margin: 1.5rem 1rem !important;
+    border-radius: 0.75rem !important;
+  }
+
+  .policy-title {
+    font-size: 2rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-header {
+    padding: 1rem !important;
+  }
+
+  .policy-main {
+    padding: 1.5rem 1rem !important;
+    margin: 1rem 0.5rem !important;
+  }
+
+  .policy-title {
+    font-size: 1.75rem !important;
+  }
+}

@@ -11,7 +11,7 @@ const CookiePolicy = () => {
             color: '#334155'
         }}>
             {/* Header */}
-            <header style={{
+            <header className="policy-header" style={{
                 background: '#ffffff',
                 borderBottom: '1px solid #e2e8f0',
                 padding: '1.5rem 2rem',
@@ -43,7 +43,7 @@ const CookiePolicy = () => {
             </header>
 
             {/* Content Container */}
-            <main style={{
+            <main className="policy-main" style={{
                 maxWidth: '800px',
                 margin: '0 auto',
                 padding: '4rem 2rem',
@@ -53,7 +53,7 @@ const CookiePolicy = () => {
                 marginTop: '3rem',
                 marginBottom: '4rem'
             }}>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '1rem', letterSpacing: '-0.025em' }}>Cookie Policy</h1>
+                <h1 className="policy-title" style={{ fontSize: '2.5rem', fontWeight: '800', color: '#0f172a', marginBottom: '1rem', letterSpacing: '-0.025em' }}>Cookie Policy</h1>
                 <p style={{ color: '#64748b', marginBottom: '3rem', fontSize: '1rem' }}>Last updated: March 10, 2026</p>
 
                 <section style={{ marginBottom: '2.5rem' }}>
