@@ -151,36 +151,152 @@ const Introduction = () => {
                     </Link>
                 </div>
 
-                {/* Features */}
+                {/* Disadvantages of Manual Process */}
                 <div style={{
-                    marginTop: '5rem',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                    gap: '2rem',
+                    marginTop: '6rem',
                     width: '100%',
-                    maxWidth: '1000px'
+                    maxWidth: '1000px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
                 }}>
-                    {[
-                        { icon: Zap, title: 'Lightning Fast', desc: 'Submit complaints in seconds with an intuitive, seamless interface.' },
-                        { icon: ShieldCheck, title: 'Secure & Transparent', desc: 'Track your complaint status in real-time. Full transparency from start to finish.' },
-                        { icon: BarChart3, title: 'Powerful Dashboard', desc: 'Administrators get rich analytics overviews to manage and resolve issues at scale.' }
-                    ].map((feature, idx) => (
-                        <div key={idx} style={{
-                            background: 'rgba(255, 255, 255, 0.6)',
-                            backdropFilter: 'blur(12px)',
-                            padding: '2rem',
-                            borderRadius: '1.5rem',
-                            textAlign: 'left',
-                            border: '1px solid rgba(255, 255, 255, 0.8)',
-                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-                        }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '1rem', background: 'rgba(37, 99, 235, 0.1)', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                                <feature.icon size={24} />
+                    <h2 style={{
+                        fontSize: '2.5rem',
+                        fontWeight: '800',
+                        color: '#0f172a',
+                        marginBottom: '1.5rem',
+                        textAlign: 'center',
+                        letterSpacing: '-0.025em'
+                    }}>
+                        Why <span style={{ color: '#ef4444' }}>Manual</span> Processes Fail
+                    </h2>
+                    <p style={{
+                        fontSize: '1.15rem',
+                        color: '#475569',
+                        maxWidth: '700px',
+                        marginBottom: '3rem',
+                        textAlign: 'center',
+                        lineHeight: '1.6'
+                    }}>
+                        Traditional methods of handling campus complaints are outdated and frustrating for everyone involved.
+                    </p>
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        gap: '1.5rem',
+                        width: '100%',
+                        overflowX: 'auto',
+                        paddingBottom: '1rem'
+                    }}>
+                        {[
+                            { title: 'Wait Times', desc: 'Action is delayed across departments because issues pile up faster than paper can travel.', color: '#ef4444', bg: '#fef2f2', border: '#fca5a5' },
+                            { title: 'Black Box effect', desc: 'The moment a complaint is filed, it vanishes. Users have no idea when and if they will be heard.', color: '#f97316', bg: '#fff7ed', border: '#fdba74' },
+                            { title: 'Missing Documents', desc: 'Critical details, reports, and photos go missing when dealing with physical or messy inbox systems.', color: '#0ea5e9', bg: '#f0f9ff', border: '#7dd3fc' },
+                            { title: 'Admin Burnout', desc: 'Teams are overwhelmed manually tracking and delegating issues, reducing time spent actually solving them.', color: '#8b5cf6', bg: '#f5f3ff', border: '#c4b5fd' }
+                        ].map((item, idx) => (
+                            <div key={idx} style={{
+                                background: item.bg,
+                                padding: '1.75rem 1.5rem',
+                                borderRadius: '1.25rem',
+                                borderTop: `4px solid ${item.color}`,
+                                borderLeft: `1px solid ${item.border}`,
+                                borderRight: `1px solid ${item.border}`,
+                                borderBottom: `1px solid ${item.border}`,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                transition: 'all 0.3s ease',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                minWidth: '220px',
+                                height: '100%'
+                            }}
+                                onMouseOver={(e) => { 
+                                    e.currentTarget.style.transform = 'translateY(-5px)'; 
+                                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+                                }}
+                                onMouseOut={(e) => { 
+                                    e.currentTarget.style.transform = 'translateY(0)'; 
+                                    e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)';
+                                }}>
+                                <div style={{ 
+                                    position: 'absolute', 
+                                    top: 0, right: 0, 
+                                    width: '120px', height: '120px', 
+                                    background: `radial-gradient(circle at top right, ${item.color}15, transparent 70%)`,
+                                    pointerEvents: 'none'
+                                }} />
+                                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.75rem', lineHeight: 1.2 }}>{item.title}</h3>
+                                <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.5', margin: 0 }}>{item.desc}</p>
                             </div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.75rem' }}>{feature.title}</h3>
-                            <p style={{ color: '#64748b', lineHeight: '1.6' }}>{feature.desc}</p>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+                </div>
+
+                {/* Why Use ResolveIt Section (Features) */}
+                <div style={{
+                    marginTop: '6rem',
+                    width: '100%',
+                    maxWidth: '1000px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'
+                }}>
+                    <h2 style={{
+                        fontSize: '2.5rem',
+                        fontWeight: '800',
+                        color: '#0f172a',
+                        marginBottom: '1.5rem',
+                        textAlign: 'center',
+                        letterSpacing: '-0.025em'
+                    }}>
+                        Why Use <span style={{ color: '#2563eb' }}>ResolveIt?</span>
+                    </h2>
+                    <p style={{
+                        fontSize: '1.15rem',
+                        color: '#475569',
+                        maxWidth: '700px',
+                        marginBottom: '3rem',
+                        textAlign: 'center',
+                        lineHeight: '1.6'
+                    }}>
+                        We replace chaos with clarity, providing a dedicated digital platform to manage issues from submission to resolution.
+                    </p>
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        gap: '1.5rem',
+                        width: '100%',
+                        overflowX: 'auto',
+                        paddingBottom: '1rem'
+                    }}>
+                        {[
+                            { icon: Zap, title: 'Lightning Fast', desc: 'Submit complaints in seconds with an intuitive, seamless interface.' },
+                            { icon: ShieldCheck, title: 'Secure & Transparent', desc: 'Track your complaint status in real-time. Full transparency from start to finish.' },
+                            { icon: BarChart3, title: 'Powerful Dashboard', desc: 'Administrators get rich analytics overviews to manage and resolve issues at scale.' },
+                            { icon: ShieldCheck, title: 'Strict Privacy', desc: 'Your complaints are 100% confidential. Students cannot view or access issues submitted by others.' }
+                        ].map((feature, idx) => (
+                            <div key={idx} style={{
+                                background: 'rgba(255, 255, 255, 0.6)',
+                                backdropFilter: 'blur(12px)',
+                                padding: '2rem',
+                                borderRadius: '1.5rem',
+                                textAlign: 'left',
+                                border: '1px solid rgba(255, 255, 255, 0.8)',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                                minWidth: '220px',
+                                height: '100%'
+                            }}>
+                                <div style={{ width: '48px', height: '48px', borderRadius: '1rem', background: 'rgba(37, 99, 235, 0.1)', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                                    <feature.icon size={24} />
+                                </div>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.75rem' }}>{feature.title}</h3>
+                                <p style={{ color: '#64748b', lineHeight: '1.6' }}>{feature.desc}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* How it Works Section */}
