@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { LayoutDashboard, Users, CheckSquare, XSquare, LogOut, Check, X, Clock, CheckCircle, XCircle, BarChart3, FileText, AlertCircle, Trash2, Search, Filter, Menu, User, UserCog } from 'lucide-react';
+import { LayoutDashboard, Users, CheckSquare, XSquare, LogOut, Check, X, Clock, CheckCircle, XCircle, BarChart3, FileText, AlertCircle, Trash2, Search, Filter, Menu, User, UserCog, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { db, auth } from "../firebase";
 import { collection, query, getDocs, doc, deleteDoc, updateDoc, where } from "firebase/firestore";
@@ -22,6 +22,14 @@ const AdminDashboard = () => {
     const [filterStatus, setFilterStatus] = useState('All');
     const [filterCategory, setFilterCategory] = useState('All');
     const [sortBy, setSortBy] = useState('Newest');
+    const [expandedComplaints, setExpandedComplaints] = useState({});
+
+    const toggleExpand = (id) => {
+        setExpandedComplaints(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
 
     React.useEffect(() => {
         const fetchUserData = async () => {
@@ -280,8 +288,9 @@ const AdminDashboard = () => {
                             <div className="admin-management-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '1.5rem' }}>
                                 {actionComplaints.map(complaint => {
                                     const colors = getStatusColor(complaint.status);
+                                    const isExpanded = expandedComplaints[complaint.id];
                                     return (
-                                        <div key={complaint.id} style={{ padding: '1.75rem', borderRadius: '1rem', background: '#ffffff', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', transition: 'transform 0.2s, box-shadow 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }}>
+                                        <div key={complaint.id} onClick={() => toggleExpand(complaint.id)} style={{ cursor: 'pointer', padding: '1.75rem', borderRadius: '1rem', background: '#ffffff', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', transition: 'transform 0.2s, box-shadow 0.2s' }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
                                                 <div>
                                                     <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#0f172a' }}>{complaint.student}</h3>
@@ -293,27 +302,36 @@ const AdminDashboard = () => {
                                             </div>
                                             <div style={{ marginBottom: '1.5rem', flex: 1 }}>
                                                 <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>{complaint.title}</h4>
+                                                {isExpanded && (
+                                                    <div style={{ padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', marginTop: '0.75rem', border: '1px solid #f1f5f9' }}>
+                                                        <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>{complaint.description || complaint.issue}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>
+                                                {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                                {isExpanded ? 'Hide Details' : 'View Details'}
                                             </div>
                                             <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto', flexWrap: 'wrap' }}>
                                                 {complaint.status && complaint.status.toLowerCase() === 'pending' && (
                                                     <>
-                                                        <button onClick={() => updateComplaintStatus(complaint.id, 'accepted')} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '0.75rem', background: '#2563eb', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '100px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}>
+                                                        <button onClick={(e) => { e.stopPropagation(); updateComplaintStatus(complaint.id, 'accepted'); }} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '0.75rem', background: '#2563eb', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '100px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1d4ed8'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#2563eb'}>
                                                             <Check size={18} /> Accept
                                                         </button>
-                                                        <button onClick={() => updateComplaintStatus(complaint.id, 'rejected')} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '0.75rem', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '100px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
+                                                        <button onClick={(e) => { e.stopPropagation(); updateComplaintStatus(complaint.id, 'rejected'); }} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', borderRadius: '0.75rem', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '100px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
                                                             <X size={18} /> Reject
                                                         </button>
                                                     </>
                                                 )}
                                                 {complaint.status && complaint.status.toLowerCase() === 'accepted' && (
                                                     <>
-                                                        <button onClick={() => updateComplaintStatus(complaint.id, 'resolved')} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem', padding: '0.65rem 0.25rem', borderRadius: '0.75rem', fontSize: '0.85rem', background: '#16a34a', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '80px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#15803d'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#16a34a'}>
+                                                        <button onClick={(e) => { e.stopPropagation(); updateComplaintStatus(complaint.id, 'resolved'); }} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem', padding: '0.65rem 0.25rem', borderRadius: '0.75rem', fontSize: '0.85rem', background: '#16a34a', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '80px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#15803d'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#16a34a'}>
                                                             <CheckCircle size={16} /> Resolve
                                                         </button>
-                                                        <button onClick={() => updateComplaintStatus(complaint.id, 'unresolved')} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem', padding: '0.65rem 0.25rem', borderRadius: '0.75rem', fontSize: '0.85rem', background: '#ea580c', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '80px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#c2410c'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ea580c'}>
+                                                        <button onClick={(e) => { e.stopPropagation(); updateComplaintStatus(complaint.id, 'unresolved'); }} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem', padding: '0.65rem 0.25rem', borderRadius: '0.75rem', fontSize: '0.85rem', background: '#ea580c', color: 'white', border: 'none', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '80px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#c2410c'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ea580c'}>
                                                             <AlertCircle size={16} /> Unresolve
                                                         </button>
-                                                        <button onClick={() => updateComplaintStatus(complaint.id, 'rejected')} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem', padding: '0.65rem 0.25rem', borderRadius: '0.75rem', fontSize: '0.85rem', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '80px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
+                                                        <button onClick={(e) => { e.stopPropagation(); updateComplaintStatus(complaint.id, 'rejected'); }} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.4rem', padding: '0.65rem 0.25rem', borderRadius: '0.75rem', fontSize: '0.85rem', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', fontWeight: '600', cursor: 'pointer', transition: 'background 0.2s', minWidth: '80px' }} onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
                                                             <X size={16} /> Reject
                                                         </button>
                                                     </>
@@ -418,26 +436,38 @@ const AdminDashboard = () => {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                     {filteredHistoryComplaints.map(complaint => {
                                         const colors = getStatusColor(complaint.status);
+                                        const isExpanded = expandedComplaints[complaint.id];
                                         return (
-                                            <div key={complaint.id} className="list-item-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem', background: '#ffffff', borderRadius: '1rem', border: '1px solid #e2e8f0', transition: 'all 0.2s ease', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)' }} onMouseOver={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }} onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0,0,0,0.05)'; }}>
-                                                <div style={{ flex: 1 }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.4rem' }}>
-                                                        <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#0f172a', margin: 0 }}>{complaint.title}</h3>
-                                                        <span style={{ fontSize: '0.75rem', color: '#64748b', padding: '0.2rem 0.6rem', background: '#f1f5f9', borderRadius: '1rem', fontWeight: '600' }}>ID: #{complaint.id}</span>
+                                            <div key={complaint.id} onClick={() => toggleExpand(complaint.id)} style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer', padding: '1.5rem', background: '#ffffff', borderRadius: '1rem', border: '1px solid #e2e8f0', transition: 'all 0.2s ease', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)' }} onMouseOver={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }} onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0,0,0,0.05)'; }}>
+                                                <div className="list-item-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <div style={{ flex: 1 }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.4rem' }}>
+                                                            <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#0f172a', margin: 0 }}>{complaint.title}</h3>
+                                                            <span style={{ fontSize: '0.75rem', color: '#64748b', padding: '0.2rem 0.6rem', background: '#f1f5f9', borderRadius: '1rem', fontWeight: '600' }}>ID: #{complaint.id}</span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: '#64748b', fontWeight: '500' }}>
+                                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Users size={16} /> {complaint.student}</span>
+                                                            <span>•</span><span>{complaint.category || 'General'}</span><span>•</span><span>{formatDate(complaint.date)}</span>
+                                                        </div>
                                                     </div>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: '#64748b', fontWeight: '500' }}>
-                                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Users size={16} /> {complaint.student}</span>
-                                                        <span>•</span><span>{complaint.category || 'General'}</span><span>•</span><span>{formatDate(complaint.date)}</span>
+                                                    <div className="list-item-mobile-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '2rem', background: colors.bg, color: colors.text, border: `1px solid ${colors.border}`, fontWeight: '700', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
+                                                            {getStatusIcon(complaint.status)} {complaint.status}
+                                                        </div>
+
+                                                        <button onClick={(e) => { e.stopPropagation(); handleDelete(complaint.id); }} style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} title="Delete Complaint" onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
+                                                            <Trash2 size={16} />
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="list-item-mobile-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '2rem', background: colors.bg, color: colors.text, border: `1px solid ${colors.border}`, fontWeight: '700', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
-                                                        {getStatusIcon(complaint.status)} {complaint.status}
+                                                {isExpanded && (
+                                                    <div style={{ padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', marginTop: '1rem', border: '1px solid #f1f5f9' }}>
+                                                        <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>{complaint.description || complaint.issue}</p>
                                                     </div>
-
-                                                    <button onClick={() => handleDelete(complaint.id)} style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} title="Delete Complaint" onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
-                                                        <Trash2 size={16} />
-                                                    </button>
+                                                )}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.75rem', color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>
+                                                    {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                                    {isExpanded ? 'Hide Details' : 'View Details'}
                                                 </div>
                                             </div>
                                         )
