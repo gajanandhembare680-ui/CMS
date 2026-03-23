@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { FileText, PlusCircle, CheckCircle, XCircle, Clock, LayoutDashboard, LogOut, BarChart3, Check, AlertCircle, Trash2, User, Menu, X } from 'lucide-react';
+import { FileText, PlusCircle, CheckCircle, XCircle, Clock, LayoutDashboard, LogOut, BarChart3, Check, AlertCircle, Trash2, User, Menu, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ComplaintContext } from '../context/ComplaintContext';
 import { addDoc, collection, doc, deleteDoc } from "firebase/firestore";
@@ -16,6 +16,14 @@ const StudentDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [showLogout, setShowLogout] = useState(false);
+    const [expandedComplaints, setExpandedComplaints] = useState({});
+
+    const toggleExpand = (id) => {
+        setExpandedComplaints(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
 
     // Filter complaints for the "current" student directly from the Firestore results
     const studentComplaints = fetchedComplaints;
@@ -369,8 +377,10 @@ const StudentDashboard = () => {
                                         {/* Sort complaints so newest is on top (assuming ascending ID means older) */}
                                         {[...studentComplaints].reverse().map(complaint => {
                                             const colors = getStatusColor(complaint.status);
+                                            const isExpanded = expandedComplaints[complaint.id];
                                             return (
-                                                <div key={complaint.id} className="list-item-mobile" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '1.5rem', background: 'rgba(255,255,255,0.6)', borderRadius: '0.75rem', border: '1px solid rgba(255,255,255,0.8)', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+                                                <div key={complaint.id} className="list-item-mobile" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '1.5rem', background: 'rgba(255,255,255,0.6)', borderRadius: '0.75rem', border: '1px solid rgba(255,255,255,0.8)', transition: 'transform 0.2s ease, box-shadow 0.2s ease', cursor: 'pointer' }}
+                                                    onClick={() => toggleExpand(complaint.id)}
                                                     onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.05)' }}
                                                     onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
                                                 >
@@ -380,12 +390,22 @@ const StudentDashboard = () => {
                                                             <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{formatDate(complaint.date)}</span>
                                                         </div>
                                                         <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{complaint.title}</h3>
-                                                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>{complaint.issue}</p>
+                                                        {isExpanded && (
+                                                            <div style={{ padding: '1rem', background: 'rgba(255, 255, 255, 0.5)', borderRadius: '0.5rem', marginBottom: '1rem', border: '1px solid rgba(0,0,0,0.05)' }}>
+                                                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.5, margin: 0 }}>{complaint.description || complaint.issue}</p>
+                                                            </div>
+                                                        )}
 
-                                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem', color: 'var(--text-primary)', background: 'white', padding: '0.25rem 0.75rem', borderRadius: '1rem', border: '1px solid rgba(0,0,0,0.1)' }}>
-                                                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-primary)', display: 'inline-block' }}></span>
-                                                            {complaint.category || 'General'}
-                                                        </span>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem', color: 'var(--text-primary)', background: 'white', padding: '0.25rem 0.75rem', borderRadius: '1rem', border: '1px solid rgba(0,0,0,0.1)' }}>
+                                                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-primary)', display: 'inline-block' }}></span>
+                                                                {complaint.category || 'General'}
+                                                            </span>
+                                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.85rem', color: 'var(--accent-primary)', fontWeight: '600', transition: 'all 0.2s' }}>
+                                                                {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                                                {isExpanded ? 'Hide Details' : 'View Details'}
+                                                            </span>
+                                                        </div>
                                                     </div>
 
                                                     <div className="list-item-mobile-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -405,7 +425,7 @@ const StudentDashboard = () => {
                                                             {getStatusIcon(complaint.status)}
                                                             {complaint.status}
                                                         </div>
-                                                        <button onClick={() => handleDelete(complaint.id)} style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} title="Delete Complaint" onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
+                                                        <button onClick={(e) => { e.stopPropagation(); handleDelete(complaint.id); }} style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} title="Delete Complaint" onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
                                                             <Trash2 size={16} />
                                                         </button>
                                                     </div>

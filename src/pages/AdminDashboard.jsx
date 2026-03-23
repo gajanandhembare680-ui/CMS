@@ -293,7 +293,6 @@ const AdminDashboard = () => {
                                             </div>
                                             <div style={{ marginBottom: '1.5rem', flex: 1 }}>
                                                 <h4 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>{complaint.title}</h4>
-                                                <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: '1.6' }}>{complaint.issue}</p>
                                             </div>
                                             <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto', flexWrap: 'wrap' }}>
                                                 {complaint.status && complaint.status.toLowerCase() === 'pending' && (
