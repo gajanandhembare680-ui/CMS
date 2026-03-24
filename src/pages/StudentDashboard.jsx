@@ -262,7 +262,7 @@ const StudentDashboard = () => {
             <main className="dashboard-main" style={{ flex: 1, padding: '1rem 2rem 1rem 1rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 
                 {/* Header Section */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     {/* Dynamic Title based on view */}
                     <h1 className="desktop-header-title" style={{ fontSize: '1.875rem', fontWeight: '800', color: 'var(--text-primary)', margin: 0 }}>
                         {activeView === 'submit' ? 'Submit a New Complaint' : 'My Complaints Overview'}
@@ -274,7 +274,7 @@ const StudentDashboard = () => {
                             <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                                 <User size={20} />
                             </div>
-                            <span style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
+                            <span className="user-name-text" style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
                         </div>
                         {showLogout && (
                             <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem', zIndex: 50 }}>

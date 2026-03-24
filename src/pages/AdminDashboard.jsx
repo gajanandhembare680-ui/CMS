@@ -257,7 +257,7 @@ const AdminDashboard = () => {
             <main className="dashboard-main" style={{ flex: 1, padding: '2rem 3rem 2rem 1rem', display: 'flex', flexDirection: 'column', gap: '2rem', overflowY: 'auto' }}>
                 {activeView === 'management' && (
                     <>
-                        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                        <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                             <div>
                                 <h1 className="desktop-header-title" style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.025em' }}>Complaint Management</h1>
                                 <p style={{ color: '#64748b', fontSize: '1.05rem', marginTop: '0.5rem' }}>You have <span style={{ fontWeight: '700', color: '#2563eb' }}>{actionComplaints.length}</span> complaints requiring action ({pendingComplaints.length} pending, {acceptedComplaints.length} in progress).</p>
@@ -268,7 +268,7 @@ const AdminDashboard = () => {
                                     <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                                         <User size={20} />
                                     </div>
-                                    <span style={{ fontWeight: '600', color: '#0f172a', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
+                                    <span className="user-name-text" style={{ fontWeight: '600', color: '#0f172a', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
                                 </div>
                                 {showLogout && (
                                     <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem', zIndex: 50 }}>
@@ -347,7 +347,7 @@ const AdminDashboard = () => {
 
                 {activeView === 'all' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-                        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0 0 0' }}>
+                        <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0 0 0' }}>
                             <div>
                                 <h1 className="desktop-header-title" style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.025em' }}>All Complaints Overview</h1>
                                 <p style={{ color: '#64748b', fontSize: '1.05rem', margin: '0.5rem 0 0 0' }}>Comprehensive view of all submitted complaints.</p>
@@ -358,7 +358,7 @@ const AdminDashboard = () => {
                                     <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                                         <User size={20} />
                                     </div>
-                                    <span style={{ fontWeight: '600', color: '#0f172a', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
+                                    <span className="user-name-text" style={{ fontWeight: '600', color: '#0f172a', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
                                 </div>
                                 {showLogout && (
                                     <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem', zIndex: 50 }}>
@@ -477,7 +477,7 @@ const AdminDashboard = () => {
 
                 {activeView === 'users' && (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-                        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0 0 0' }}>
+                        <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0 0 0' }}>
                             <div>
                                 <h1 className="desktop-header-title" style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a', margin: 0, letterSpacing: '-0.025em' }}>User Management</h1>
                                 <p style={{ color: '#64748b', fontSize: '1.05rem', margin: '0.5rem 0 0 0' }}>Manage student accounts and access.</p>
@@ -487,7 +487,7 @@ const AdminDashboard = () => {
                                     <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                                         <User size={20} />
                                     </div>
-                                    <span style={{ fontWeight: '600', color: '#0f172a', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
+                                    <span className="user-name-text" style={{ fontWeight: '600', color: '#0f172a', fontSize: '0.95rem', userSelect: 'none' }}>{userName || 'Loading...'}</span>
                                 </div>
                                 {showLogout && (
                                     <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: '0.5rem', zIndex: 50 }}>
