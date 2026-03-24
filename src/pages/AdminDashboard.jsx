@@ -388,7 +388,7 @@ const AdminDashboard = () => {
                                     <Search size={18} color="#64748b" />
                                     <input
                                         type="text"
-                                        placeholder="Search by title or ID..."
+                                        placeholder="Search by title..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         style={{ border: 'none', outline: 'none', padding: '0.75rem', width: '100%', background: 'transparent', fontSize: '0.9rem', color: '#0f172a' }}
@@ -438,36 +438,33 @@ const AdminDashboard = () => {
                                         const colors = getStatusColor(complaint.status);
                                         const isExpanded = expandedComplaints[complaint.id];
                                         return (
-                                            <div key={complaint.id} onClick={() => toggleExpand(complaint.id)} style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer', padding: '1.5rem', background: '#ffffff', borderRadius: '1rem', border: '1px solid #e2e8f0', transition: 'all 0.2s ease', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)' }} onMouseOver={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }} onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0,0,0,0.05)'; }}>
-                                                <div className="list-item-mobile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                    <div style={{ flex: 1 }}>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.4rem' }}>
-                                                            <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#0f172a', margin: 0 }}>{complaint.title}</h3>
-                                                            <span style={{ fontSize: '0.75rem', color: '#64748b', padding: '0.2rem 0.6rem', background: '#f1f5f9', borderRadius: '1rem', fontWeight: '600' }}>ID: #{complaint.id}</span>
-                                                        </div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: '#64748b', fontWeight: '500' }}>
-                                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Users size={16} /> {complaint.student}</span>
-                                                            <span>•</span><span>{complaint.category || 'General'}</span><span>•</span><span>{formatDate(complaint.date)}</span>
-                                                        </div>
+                                            <div key={complaint.id} onClick={() => toggleExpand(complaint.id)} className="list-item-mobile" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: '1.5rem', background: '#ffffff', borderRadius: '1rem', border: '1px solid #e2e8f0', transition: 'all 0.2s ease', boxShadow: '0 1px 3px 0 rgba(0,0,0,0.05)', cursor: 'pointer' }} onMouseOver={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05)'; }} onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0,0,0,0.05)'; }}>
+                                                <div style={{ flex: 1, paddingRight: '1rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
+                                                        <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#0f172a', margin: 0 }}>{complaint.title}</h3>
                                                     </div>
-                                                    <div className="list-item-mobile-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '2rem', background: colors.bg, color: colors.text, border: `1px solid ${colors.border}`, fontWeight: '700', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
-                                                            {getStatusIcon(complaint.status)} {complaint.status}
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: '#64748b', fontWeight: '500', flexWrap: 'wrap' }}>
+                                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Users size={16} /> {complaint.student}</span>
+                                                        <span>•</span><span>{complaint.category || 'General'}</span><span>•</span><span>{formatDate(complaint.date)}</span>
+                                                    </div>
+                                                    {isExpanded && (
+                                                        <div style={{ padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', marginTop: '1rem', border: '1px solid #f1f5f9' }}>
+                                                            <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>{complaint.description || complaint.issue}</p>
                                                         </div>
-
-                                                        <button onClick={(e) => { e.stopPropagation(); handleDelete(complaint.id); }} style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} title="Delete Complaint" onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
-                                                            <Trash2 size={16} />
-                                                        </button>
+                                                    )}
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.75rem', color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>
+                                                        {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                                        {isExpanded ? 'Hide Details' : 'View Details'}
                                                     </div>
                                                 </div>
-                                                {isExpanded && (
-                                                    <div style={{ padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', marginTop: '1rem', border: '1px solid #f1f5f9' }}>
-                                                        <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>{complaint.description || complaint.issue}</p>
+                                                <div className="list-item-mobile-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: '2rem', background: colors.bg, color: colors.text, border: `1px solid ${colors.border}`, fontWeight: '700', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
+                                                        {getStatusIcon(complaint.status)} {complaint.status}
                                                     </div>
-                                                )}
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.75rem', color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>
-                                                    {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                                    {isExpanded ? 'Hide Details' : 'View Details'}
+
+                                                    <button onClick={(e) => { e.stopPropagation(); handleDelete(complaint.id); }} style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }} title="Delete Complaint" onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#fee2e2'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}>
+                                                        <Trash2 size={16} />
+                                                    </button>
                                                 </div>
                                             </div>
                                         )
@@ -520,7 +517,6 @@ const AdminDashboard = () => {
                                             <div style={{ flex: 1 }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.4rem' }}>
                                                     <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#0f172a', margin: 0 }}>{user.name}</h3>
-                                                    <span style={{ fontSize: '0.75rem', color: '#64748b', padding: '0.2rem 0.6rem', background: '#f1f5f9', borderRadius: '1rem', fontWeight: '600' }}>ID: {user.id}</span>
                                                 </div>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.9rem', color: '#64748b', fontWeight: '500' }}>
                                                     <span>{user.email}</span>

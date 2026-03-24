@@ -386,7 +386,6 @@ const StudentDashboard = () => {
                                                 >
                                                     <div style={{ maxWidth: '75%' }}>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-                                                            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '600', padding: '0.15rem 0.5rem', background: 'rgba(0,0,0,0.05)', borderRadius: '1rem' }}>ID: #{complaint.id}</span>
                                                             <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{formatDate(complaint.date)}</span>
                                                         </div>
                                                         <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>{complaint.title}</h3>
